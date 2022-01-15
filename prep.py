@@ -41,7 +41,7 @@ src_gray = src_hsv[:,:,1]
 # Create a window and a trackbar
 cv.namedWindow(source_window)
 cv.imshow(source_window, src_gray)
-thresh = 200 # initial threshold
+thresh = 125 # initial threshold
 cv.createTrackbar('Threshold: ', source_window, thresh, max_thresh, cornerHarris_demo)
-cornerHarris_demo(thresh)
+#cornerHarris_demo(thresh)
 cv.waitKey()
