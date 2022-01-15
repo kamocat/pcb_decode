@@ -6,8 +6,9 @@ import sys
 
 source_window = 'Source image'
 corners_window = 'Corners detected'
+cv.namedWindow(corners_window)
 max_thresh = 255
-def cornerHarris_demo(val):
+def cornerHarris_demo(val, src_gray):
     thresh = val
     # Detector parameters
     blockSize = 2
@@ -25,7 +26,6 @@ def cornerHarris_demo(val):
             if int(dst_norm[i,j]) > thresh:
                 cv.circle(dst_norm_scaled, (j,i), 5, (0), 2)
     # Showing the result
-    cv.namedWindow(corners_window)
     cv.imshow(corners_window, dst_norm_scaled)
 # Load source image and convert it to gray
 parser = argparse.ArgumentParser(description='Code for Harris corner detector tutorial.')
@@ -36,12 +36,15 @@ src = cv.imread(args.input)
 if src is None:
     print('Could not open or find the image:', args.input)
     exit(0)
-src_hsv = cv.cvtColor(src, cv.COLOR_BGR2HSV)
-src_gray = src_hsv[:,:,1]
 # Create a window and a trackbar
 cv.namedWindow(source_window)
-cv.imshow(source_window, src_gray)
+cv.imshow(source_window, src)
 thresh = 125 # initial threshold
-cv.createTrackbar('Threshold: ', source_window, thresh, max_thresh, cornerHarris_demo)
-#cornerHarris_demo(thresh)
+# mouse callback function
+def select_ROI(event,x,y,flags,param):
+    size = 30
+    if event == cv.EVENT_LBUTTONDBLCLK:
+        sub = src[y-size:y+size, x-size:x+size, 0] 
+        cornerHarris_demo(thresh, sub)
+cv.setMouseCallback('image',select_ROI)
 cv.waitKey()
