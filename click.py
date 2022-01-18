@@ -7,10 +7,10 @@ def select_ROI(event,x,y,flags,param):
     if event == cv.EVENT_LBUTTONDBLCLK:
         sub = img[y-size:y+size, x-size:x+size] 
         cv.imshow('ROI', sub)
-cv.setMouseCallback('image',select_ROI)
 # Create a black image, a window and bind the function to window
 cv.namedWindow('image')
 cv.imshow('image',img)
+cv.setMouseCallback('image',select_ROI)
 while(1):
     if cv.waitKey(20) & 0xFF == 27:
         break

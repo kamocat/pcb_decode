@@ -3,30 +3,12 @@ import cv2 as cv
 import numpy as np
 import argparse
 import sys
+import corner
 
 source_window = 'Source image'
 corners_window = 'Corners detected'
-cv.namedWindow(corners_window)
 max_thresh = 255
-def cornerHarris_demo(val, src_gray):
-    thresh = val
-    # Detector parameters
-    blockSize = 2
-    apertureSize = 3
-    k = 0.04
-    # Detecting corners
-    dst = cv.cornerHarris(src_gray, blockSize, apertureSize, k)
-    # Normalizing
-    dst_norm = np.empty(dst.shape, dtype=np.float32)
-    cv.normalize(dst, dst_norm, alpha=0, beta=255, norm_type=cv.NORM_MINMAX)
-    dst_norm_scaled = cv.convertScaleAbs(dst_norm)
-    # Drawing a circle around corners
-    for i in range(dst_norm.shape[0]):
-        for j in range(dst_norm.shape[1]):
-            if int(dst_norm[i,j]) > thresh:
-                cv.circle(dst_norm_scaled, (j,i), 5, (0), 2)
-    # Showing the result
-    cv.imshow(corners_window, dst_norm_scaled)
+
 # Load source image and convert it to gray
 parser = argparse.ArgumentParser(description='Code for Harris corner detector tutorial.')
 parser.add_argument('--input', help='Path to input image.',
@@ -39,12 +21,12 @@ if src is None:
 # Create a window and a trackbar
 cv.namedWindow(source_window)
 cv.imshow(source_window, src)
-thresh = 125 # initial threshold
+thresh = 180 # initial threshold
 # mouse callback function
 def select_ROI(event,x,y,flags,param):
     size = 30
     if event == cv.EVENT_LBUTTONDBLCLK:
         sub = src[y-size:y+size, x-size:x+size, 0] 
-        cornerHarris_demo(thresh, sub)
-cv.setMouseCallback('image',select_ROI)
+        corner.Harris(thresh, sub)
+cv.setMouseCallback(source_window,select_ROI)
 cv.waitKey()
