@@ -26,7 +26,7 @@ thresh = 180 # initial threshold
 def select_ROI(event,x,y,flags,param):
     size = 30
     if event == cv.EVENT_LBUTTONDBLCLK:
-        sub = src[y-size:y+size, x-size:x+size, 0] 
-        corner.Harris(thresh, sub)
+        sub = src[y-size:y+size, x-size:x+size, :] 
+        corner.fast(thresh, sub)
 cv.setMouseCallback(source_window,select_ROI)
 cv.waitKey()
