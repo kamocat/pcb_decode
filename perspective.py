@@ -76,21 +76,21 @@ cv2.destroyAllWindows()
 cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 print(f'{len(cnts)} contours found')
-c = sorted(cnts, key = cv2.contourArea, reverse = True)[:5]
+cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:1]
 # loop over the contours
 for c in cnts:
     # approximate the contour
     peri = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+    approx = cv2.approxPolyDP(c, 0.1 * peri, True)
     # if our approximated contour has four points, then we
     # can assume that we have found our screen
-    tmp = image.copy()
-    cv2.drawContours(tmp, [approx], -1, (0, 255, 0), 2)
-    cv2.imshow("Outline", tmp)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    if 0:
+    if len(approx)==4:
         screenCnt = approx
         break
 # show the contour (outline) of the piece of paper
 print("STEP 2: Find contours of paper")
+tmp = image.copy()
+cv2.drawContours(tmp, [approx], -1, (0, 255, 0), 2)
+cv2.imshow("Outline", tmp)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
