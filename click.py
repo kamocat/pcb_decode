@@ -1,6 +1,6 @@
 import numpy as np
 import cv2 as cv
-img = cv.imread('test_images/front.jpg')
+img = cv.imread('test_images/fslaser_front.jpg')
 # mouse callback function
 def select_ROI(event,x,y,flags,param):
     size = 30

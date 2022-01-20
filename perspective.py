@@ -55,7 +55,7 @@ def four_point_transform(image, pts):
 	# return the warped image
 	return warped
 
-image = cv2.imread('test_images/back.jpg')
+image = cv2.imread('test_images/fslaser_back.jpg')
 ratio = image.shape[0] / 500.0
 orig = image.copy()
 image = imutils.resize(image, height = 500)
@@ -74,17 +74,10 @@ cv2.destroyAllWindows()
 # largest ones, and initialize the screen contour
 cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
-cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:5]
+c = sorted(cnts, key = cv2.contourArea, reverse = True)[1]
 # loop over the contours
-for c in cnts:
-	# approximate the contour
-	peri = cv2.arcLength(c, True)
-	approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-	# if our approximated contour has four points, then we
-	# can assume that we have found our screen
-	if len(approx) == 4:
-		screenCnt = approx
-		break
+peri = cv2.arcLength(c, True)
+approx = cv2.approxPolyDP(c, 0.02 * peri, True)
 # show the contour (outline) of the piece of paper
 print("STEP 2: Find contours of paper")
 cv2.drawContours(image, [screenCnt], -1, (0, 255, 0), 2)

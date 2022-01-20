@@ -12,7 +12,7 @@ max_thresh = 255
 # Load source image and convert it to gray
 parser = argparse.ArgumentParser(description='Code for Harris corner detector tutorial.')
 parser.add_argument('--input', help='Path to input image.',
-        default='test_images/front.jpg')
+        default='test_images/fslaser_front.jpg')
 args = parser.parse_args()
 src = cv.imread(args.input)
 if src is None:
