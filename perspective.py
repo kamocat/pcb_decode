@@ -59,7 +59,7 @@ def four_point_transform(image, pts):
 image = cv2.imread('test_images/fslaser_back.jpg')
 ratio = image.shape[0] / 500.0
 orig = image.copy()
-#image = imutils.resize(image, height = 500)
+image = imutils.resize(image, height = 500)
 # convert the image to grayscale, blur it, and find edges
 # in the image
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)[:,:,1]
@@ -97,11 +97,6 @@ cv2.destroyAllWindows()
 # apply the four point transform to obtain a top-down
 # view of the original image
 warped = four_point_transform(orig, screenCnt.reshape(4, 2) * ratio)
-# convert the warped image to grayscale, then threshold it
-# to give it that 'black and white' paper effect
-warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-T = threshold_local(warped, 11, offset = 10, method = "gaussian")
-warped = (warped > T).astype("uint8") * 255
 # show the original and scanned images
 print("STEP 3: Apply perspective transform")
 cv2.imshow("Original", imutils.resize(orig, height = 650))
