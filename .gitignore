@@ -4,3 +4,4 @@ share/
 include/
 lib/
 lib64
+*.png
