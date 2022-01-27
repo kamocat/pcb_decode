@@ -1,6 +1,6 @@
 import numpy as np
 import cv2 as cv
-import colormap
+import pudb; pu.db
 img = cv.imread('bw2.png')
 img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 cv.imshow('colored',img)
@@ -12,12 +12,9 @@ xmax = img.shape[1]-1
 print(f'xmax: {xmax} ymax: {ymax}')
 
 def Inside(x, y):
-    if x<0 or x>xmax or y<0 or y>ymax :
+    if x<0 or x>xmax:
         return False
-    elif img[y,x] == 255:
-        return True
-    else:
-        return False
+    return (img[y,x] == 255)
 
 # scan-and-fill implementation from Wikipedia
 # https://en.wikipedia.org/wiki/Flood_fill#Span_Filling
@@ -25,34 +22,38 @@ def flood(img, mark, x, y):
     if not Inside(x,y):
         return
     s = []
-    s.append((x,x,y))
+    s.append((x,x,y, 1))
     while( len(s) > 0 ):
-        (x1, x2, y) = s.pop()
+        # (span_start, span_end, y, direction)
+        (x1, x2, y, d) = s.pop()
+        print(f'{x1}:{x1}, {y} {"up" if d<1 else "down"}')
         if( x2 < x1 ):
             continue #empty span
         if( y<0 or y>ymax):
             continue # y is out of range
         x = x1
+        span_end = x1-1
         # Fill to the left
         while Inside(x-1, y):
-            img[y,x-1] = mark
             x = x-1
-        # Search above
-        s.append((x, x1-1, y-1))
-        while (x1 < x2):
+        span_start = x
+        # Search above left
+        s.append((span_start, span_end, y-d, -d))
+        while (x < x2):
+            x = span_end + 1
             # Fill to the right
-            while Inside(x1,y):
-                img[y, x1] = mark
-                x1 = x1 + 1
+            while Inside(x,y):
+                x = x + 1
             # Search below
-            s.append((x, x1-1, y+1))
-            x = x1
+            span_end= x-1
+            s.append((span_start, span_end, y+d, d))
+            img[y, span_start:span_end] = mark
             # Continue searching designated span
-            while (x1<x2) and not Inside(x,y):
-                x1 = x1 + 1
-        if (x > x2):
-            # Search above
-            s.append((x2, x, y-1))
+            while not Inside(x,y):
+                x = x + 1
+            span_start = x
+        # Search above right
+        s.append((x2, span_end, y-d, -d))
 
 
 
