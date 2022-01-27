@@ -22,12 +22,14 @@ void flood(Mat img, int mark, int x, int y){
     std::stack <struct span> s;
     s.push({x,x,y, 1});
     while( !s.empty() ){
+        if( s.empty() )
+            break;
         struct span sp = s.top();
         s.pop();
         int x1 = sp.start;
         int x2 = sp.end;
         int y  = sp.y;
-        std::cout << "Line " << y << std::endl;
+        std::cout << "queue: " << s.size()<< " Line " << y;
         int d  = sp.direction;
         if( x2 < x1 )
             continue; //empty span
@@ -42,6 +44,7 @@ void flood(Mat img, int mark, int x, int y){
             --x;
         }
         sp.start = x;
+        std::cout<<" start "<<sp.start;
         // Search above left
         s.push({sp.start, sp.end, y-d, -d});
         while (x < x2){
@@ -61,6 +64,9 @@ void flood(Mat img, int mark, int x, int y){
         }
         // Search above right
         s.push({x2, sp.end, y-d, -d});
+        std::cout<<" end "<<sp.end<<std::endl;
+        imshow("Display Image", img);
+        waitKey(10);
     }
     return;
 }
@@ -81,10 +87,10 @@ int main(int argc, char** argv )
     }
     int ymax = img.rows - 1;
     int xmax = img.cols - 1;
-    cvtColor(img, img, COLOR_BGR2GRAY);
-    flood(img,128,1,1);
     namedWindow("Display Image", WINDOW_AUTOSIZE );
-    imshow("Display Image", img);
+    cvtColor(img, img, COLOR_BGR2GRAY);
+    flood(img,128,5,5);
+    std::cout<<"Done"<<std::endl;
     waitKey(0);
     return 0;
 }
