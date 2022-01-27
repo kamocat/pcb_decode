@@ -27,6 +27,7 @@ void flood(Mat img, int mark, int x, int y){
         int x1 = sp.start;
         int x2 = sp.end;
         int y  = sp.y;
+        std::cout << "Line " << y << std::endl;
         int d  = sp.direction;
         if( x2 < x1 )
             continue; //empty span
@@ -81,7 +82,7 @@ int main(int argc, char** argv )
     int ymax = img.rows - 1;
     int xmax = img.cols - 1;
     cvtColor(img, img, COLOR_BGR2GRAY);
-    flood(img,128,296,250);
+    flood(img,128,1,1);
     namedWindow("Display Image", WINDOW_AUTOSIZE );
     imshow("Display Image", img);
     waitKey(0);
